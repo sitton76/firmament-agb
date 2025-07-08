@@ -15,3 +15,4 @@ Cargo.lock
 
 # Custom stuff added by me
 *.gba
+*.sav

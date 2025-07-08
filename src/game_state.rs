@@ -26,44 +26,42 @@ impl GameState {
     }
 
     pub fn change_scene(&mut self, next_scene: scene_list::SCENES) {
-        self.clear();
-        match scene_list::get_layout(next_scene) {
-            Some(new_box) => {
-                self.obj_box = new_box;
-                self.current_map = next_scene;
-            },
-            None => panic!("Something went very wrong!"),
+        self.empty_box();
+        let new_box = scene_list::get_layout(next_scene);
+        for obj in new_box {
+            self.add_obj(obj);
         }
+        self.current_map = next_scene;
     }
 
     pub fn add_obj(&mut self, new_obj: Box<dyn GameObj>) {
         self.obj_box.push(new_obj);
         match self.obj_box.last_mut() {
-            Some(val) => { val.ready(); },
-            _ => { return; },
+            Some(val) => val.ready(),
+            _ => return,
         }
     }
     
-    pub fn clear(&mut self) {
+    pub fn empty_box(&mut self) {
         self.obj_box.clear();
         assert!(self.obj_box.is_empty());
     }
 }
 
 fn update_objs(obj_box: &mut Vec<Box<dyn GameObj>>, input: &ButtonController) {
-        for obj in obj_box {
-            if obj.on_screen() {
-                obj.update(input);
-            }
+    for obj in obj_box {
+        if obj.on_screen() {
+            obj.update(input);
         }
+    }
 }
 
 fn draw_objs(obj_box: &mut Vec<Box<dyn GameObj>>, frame:&mut GraphicsFrame) {
-        for obj in obj_box {
-            if obj.on_screen() {
-                obj.draw(frame);
-            }
+    for obj in obj_box {
+        if obj.on_screen() {
+            obj.draw(frame);
         }
+    }
 }
 
 fn update_free(obj_box: &mut Vec<Box<dyn GameObj>>) {

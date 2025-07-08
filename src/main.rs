@@ -31,4 +31,3 @@ fn main(mut gba: agb::Gba) -> ! {
         frame.commit();
     }
 }
-
