@@ -56,12 +56,12 @@ impl Player {
 
 impl GameObj for Player {
     fn update(&mut self, controller: &ButtonController) {
-        self.prev_pos.x = self.x_pos as i32;
-        self.prev_pos.y = self.y_pos as i32;
+        self.prev_pos.x = self.x_pos;
+        self.prev_pos.y = self.y_pos;
         self.x_pos = self.x_pos.clamp(0, (agb::display::WIDTH - 16));
         self.y_pos = self.y_pos.clamp(0, (agb::display::HEIGHT - 16));
         self.handle_input(controller);
-        self.object.set_pos((self.x_pos as i32, self.y_pos as i32));
+        self.object.set_pos((self.x_pos, self.y_pos));
     }
 
     fn on_screen(&self) -> bool {
@@ -91,7 +91,7 @@ impl GameObj for Player {
     }
 
     fn get_pos(&self) -> Option<Vector2D<i32>> {
-        return Some(Vector2D { x: self.x_pos as i32, y: self.y_pos as i32 });
+        return Some(Vector2D { x: self.x_pos, y: self.y_pos});
     }
 
     fn draw(&self, frame: &mut GraphicsFrame) {
