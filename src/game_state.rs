@@ -16,8 +16,8 @@ impl GameState {
     pub fn cycle_update(&mut self, frame: &mut GraphicsFrame) {
         update_free(&mut self.obj_box);
         update_objs(&mut self.obj_box);
-        draw_objs(&mut self.obj_box, frame);
         update_collisions(&mut self.obj_box);
+        draw_objs(&mut self.obj_box, frame);
     }
 
     pub fn add_obj(&mut self, new_obj: Box<dyn GameObj>) {
