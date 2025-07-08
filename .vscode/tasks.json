@@ -1,0 +1,23 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Rust build: debug",
+            "command": "cargo",
+            "args": [
+                "build"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "CARGO_TARGET_DIR": "${workspaceFolder}/target"
+                }
+            }
+        },
+        {
+            "label": "Ready ROM for hardware",
+            "command": "agb-gbafix",
+            "args": ["target/thumbv4t-none-eabi/release/firmament-agb", "-o", "firmament-agb.gba"]
+        },
+    ],
+}
