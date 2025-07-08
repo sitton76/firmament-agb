@@ -1,0 +1,1 @@
+#[path = "actors/player.rs"] pub(crate) mod player;

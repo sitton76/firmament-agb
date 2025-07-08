@@ -7,8 +7,8 @@ extern crate alloc;
 
 mod game_state;
 mod scene_list;
-#[path = "traits/game_obj.rs"] mod game_obj;
-#[path = "actors/actor_list.rs"] mod actor_list;
+mod actor_list;
+mod game_obj;
 
 const DELTA : f32 = 1.0 / 59.73;
 
