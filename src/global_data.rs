@@ -1,7 +1,7 @@
 #![allow(dead_code, unused_variables)]
 use agb::{fixnum::Vector2D, input::ButtonController};
 
-use crate::scene_list::SCENES;
+use crate::scene::SCENES;
 
 pub(crate) struct GlobalData {
     flags: [bool; Flags::FlagMax as usize],

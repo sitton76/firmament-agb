@@ -6,8 +6,8 @@
 extern crate alloc;
 
 mod game_state;
-mod scene_list;
-mod actor_list;
+mod scene;
+mod actor;
 mod game_obj;
 mod global_data;
 
@@ -17,8 +17,7 @@ const DELTA : f32 = 1.0 / 59.73;
 fn main(mut gba: agb::Gba) -> ! {
     let mut gfx = gba.graphics.get();
     let mut game_state = game_state::GameState::new();
-    game_state.change_scene(scene_list::SCENES::TestScene);
-
+    game_state.change_scene(scene::SCENES::TestScene);
     loop {
         let mut frame = gfx.frame();
         game_state.cycle_update(&mut frame);

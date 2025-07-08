@@ -1,10 +1,10 @@
-use agb::{display::GraphicsFrame, input::ButtonController};
+use agb::{display::GraphicsFrame};
 use alloc::{boxed::Box, vec::Vec};
-use crate::{game_obj::GameObj, global_data, scene_list, DELTA};
+use crate::{game_obj::GameObj, global_data, scene, DELTA};
 
 pub(crate) struct GameState {
     obj_box: Vec<Box<dyn GameObj>>,
-    current_map: scene_list::SCENES,
+    current_map: scene::SCENES,
     globals: global_data::GlobalData,
 }
 
@@ -12,7 +12,7 @@ impl GameState {
     pub fn new() -> GameState {
         return GameState {
             obj_box: Vec::new(),
-            current_map: scene_list::SCENES::TestScene,
+            current_map: scene::SCENES::TestScene,
             globals: global_data::GlobalData::new(),
         }
     }
@@ -31,9 +31,9 @@ impl GameState {
 
     }
 
-    pub fn change_scene(&mut self, next_scene: scene_list::SCENES) {
+    pub fn change_scene(&mut self, next_scene: scene::SCENES) {
         self.empty_box();
-        let new_box = scene_list::get_layout(next_scene);
+        let new_box = scene::get_layout(next_scene);
         for obj in new_box {
             self.add_obj(obj);
         }

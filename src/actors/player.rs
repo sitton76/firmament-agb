@@ -1,4 +1,4 @@
-use agb::input::{ButtonController, Button};
+use agb::input::Button;
 use agb::{display::GraphicsFrame, fixnum::Vector2D};
 use agb::include_aseprite;
 use agb::display::object::Object;
@@ -20,10 +20,10 @@ pub(crate) struct Player {
 }
 
 impl Player {
-    pub fn new() -> Player {
+    pub fn new(starting_pos: Vector2D<i32>) -> Player {
         Player {
             object: Object::new(sprites::TEST_PLAYER.sprite(0)),
-            pos: Vector2D {x: 0, y: 0},
+            pos: starting_pos,
             prev_pos: Vector2D { x: 0, y: 0 },
             speed: 100.0,
             on_screen: true,
@@ -43,10 +43,6 @@ impl Player {
             self.pos.x -= (self.speed * DELTA) as i32;
         } else if controller.is_pressed(Button::RIGHT) {
             self.pos.x += (self.speed * DELTA) as i32;
-        }
-
-        if controller.is_just_pressed(Button::A) {
-            globals.queue_scene_transition(crate::scene_list::SCENES::Map001);
         }
     }
 
