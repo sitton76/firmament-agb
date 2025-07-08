@@ -12,8 +12,7 @@ include_aseprite!(
 
 pub(crate) struct Player {
     object: Object,
-    x_pos: i32,
-    y_pos: i32,
+    pos: Vector2D<i32>,
     prev_pos: Vector2D<i32>,
     speed: f32,
     on_screen: bool,
@@ -24,8 +23,7 @@ impl Player {
     pub fn new() -> Player {
         Player {
             object: Object::new(sprites::TEST_PLAYER.sprite(0)),
-            x_pos: 0,
-            y_pos: 0,
+            pos: Vector2D {x: 0, y: 0},
             prev_pos: Vector2D { x: 0, y: 0 },
             speed: 100.0,
             on_screen: true,
@@ -35,33 +33,31 @@ impl Player {
 
     fn handle_input(&mut self, controller: &ButtonController) {
         if controller.is_pressed(Button::UP) {
-            self.y_pos -= (self.speed * DELTA) as i32;
+            self.pos.y -= (self.speed * DELTA) as i32;
         } else if controller.is_pressed(Button::DOWN) {
-            self.y_pos += (self.speed * DELTA) as i32
+            self.pos.y += (self.speed * DELTA) as i32
         }
 
         if controller.is_pressed(Button::LEFT) {
-            self.x_pos -= (self.speed * DELTA) as i32;
+            self.pos.x -= (self.speed * DELTA) as i32;
         } else if controller.is_pressed(Button::RIGHT) {
-            self.x_pos += (self.speed * DELTA) as i32;
+            self.pos.x += (self.speed * DELTA) as i32;
         }
     }
 
     fn prevent_movement(&mut self) {
-        self.x_pos = self.prev_pos.x;
-        self.y_pos = self.prev_pos.y;
+        self.pos = self.prev_pos;
     }
 
 }
 
 impl GameObj for Player {
     fn update(&mut self, controller: &ButtonController) {
-        self.prev_pos.x = self.x_pos;
-        self.prev_pos.y = self.y_pos;
-        self.x_pos = self.x_pos.clamp(0, agb::display::WIDTH - 32);
-        self.y_pos = self.y_pos.clamp(0, agb::display::HEIGHT - 32);
+        self.prev_pos = self.pos;
+        self.pos.x = self.pos.x.clamp(0, agb::display::WIDTH - 32);
+        self.pos.y = self.pos.y.clamp(0, agb::display::HEIGHT - 32);
         self.handle_input(controller);
-        self.object.set_pos((self.x_pos, self.y_pos));
+        self.object.set_pos(self.pos);
     }
 
     fn on_screen(&self) -> bool {
@@ -91,7 +87,7 @@ impl GameObj for Player {
     }
 
     fn get_pos(&self) -> Option<Vector2D<i32>> {
-        return Some(Vector2D { x: self.x_pos, y: self.y_pos});
+        return Some(self.pos);
     }
 
     fn draw(&self, frame: &mut GraphicsFrame) {
