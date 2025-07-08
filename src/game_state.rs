@@ -1,10 +1,11 @@
 use agb::{display::GraphicsFrame, input::ButtonController};
 use alloc::{boxed::Box, vec::Vec};
-use crate::{game_obj::GameObj, DELTA};
+use crate::{game_obj::GameObj, DELTA, scene_list};
 
 pub(crate) struct GameState {
     obj_box: Vec<Box<dyn GameObj>>,
     input_controller: ButtonController,
+    current_map: scene_list::SCENES,
 }
 
 impl GameState {
@@ -12,6 +13,7 @@ impl GameState {
         return GameState {
             obj_box: Vec::new(),
             input_controller: ButtonController::new(),
+            current_map: scene_list::SCENES::TEST_SCENE,
         }
     }
 
@@ -21,6 +23,17 @@ impl GameState {
         update_objs(&mut self.obj_box, &self.input_controller);
         update_collisions(&mut self.obj_box);
         draw_objs(&mut self.obj_box, frame);
+    }
+
+    pub fn change_scene(&mut self, next_scene: scene_list::SCENES) {
+        self.clear();
+        match scene_list::get_layout(next_scene) {
+            Some(new_box) => {
+                self.obj_box = new_box;
+                self.current_map = next_scene;
+            },
+            None => panic!("Something went very wrong!"),
+        }
     }
 
     pub fn add_obj(&mut self, new_obj: Box<dyn GameObj>) {
