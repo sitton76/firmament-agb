@@ -41,9 +41,9 @@ impl Player {
         }
 
         if controller.is_pressed(Button::LEFT) {
-            self.x_pos -= (self.speed * DELTA) as i32
+            self.x_pos -= (self.speed * DELTA) as i32;
         } else if controller.is_pressed(Button::RIGHT) {
-            self.x_pos += (self.speed * DELTA) as i32
+            self.x_pos += (self.speed * DELTA) as i32;
         }
     }
 
@@ -58,8 +58,8 @@ impl GameObj for Player {
     fn update(&mut self, controller: &ButtonController) {
         self.prev_pos.x = self.x_pos;
         self.prev_pos.y = self.y_pos;
-        self.x_pos = self.x_pos.clamp(0, (agb::display::WIDTH - 16));
-        self.y_pos = self.y_pos.clamp(0, (agb::display::HEIGHT - 16));
+        self.x_pos = self.x_pos.clamp(0, agb::display::WIDTH - 32);
+        self.y_pos = self.y_pos.clamp(0, agb::display::HEIGHT - 32);
         self.handle_input(controller);
         self.object.set_pos((self.x_pos, self.y_pos));
     }

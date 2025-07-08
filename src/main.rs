@@ -19,6 +19,7 @@ const DELTA : f32 = 1.0 / 59.73;
 fn main(mut gba: agb::Gba) -> ! {
     let mut gfx = gba.graphics.get();
     let mut game_state = game_state::GameState::new();
+    game_state.clear();
     game_state.add_obj(Box::new(player::Player::new()));
 
     loop {
