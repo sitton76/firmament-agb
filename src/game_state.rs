@@ -13,7 +13,7 @@ impl GameState {
         return GameState {
             obj_box: Vec::new(),
             input_controller: ButtonController::new(),
-            current_map: scene_list::SCENES::TEST_SCENE,
+            current_map: scene_list::SCENES::TestScene,
         }
     }
 
