@@ -3,7 +3,7 @@ use agb::{display::GraphicsFrame, fixnum::Vector2D};
 use agb::include_aseprite;
 use agb::display::object::Object;
 use crate::game_obj::{GameObj, ResponseType};
-use crate::DELTA;
+use crate::{global_data, DELTA};
 
 include_aseprite!(
     mod sprites,
@@ -31,7 +31,8 @@ impl Player {
         }
     }
 
-    fn handle_input(&mut self, controller: &ButtonController) {
+    fn handle_input(&mut self, globals: &mut global_data::GlobalData) {
+        let controller = globals.get_input();
         if controller.is_pressed(Button::UP) {
             self.pos.y -= (self.speed * DELTA) as i32;
         } else if controller.is_pressed(Button::DOWN) {
@@ -43,6 +44,10 @@ impl Player {
         } else if controller.is_pressed(Button::RIGHT) {
             self.pos.x += (self.speed * DELTA) as i32;
         }
+
+        if controller.is_just_pressed(Button::A) {
+            globals.queue_scene_transition(crate::scene_list::SCENES::Map001);
+        }
     }
 
     fn prevent_movement(&mut self) {
@@ -52,11 +57,11 @@ impl Player {
 }
 
 impl GameObj for Player {
-    fn update(&mut self, controller: &ButtonController) {
+    fn update(&mut self, globals: &mut global_data::GlobalData) {
         self.prev_pos = self.pos;
         self.pos.x = self.pos.x.clamp(0, agb::display::WIDTH - 32);
         self.pos.y = self.pos.y.clamp(0, agb::display::HEIGHT - 32);
-        self.handle_input(controller);
+        self.handle_input(globals);
         self.object.set_pos(self.pos);
     }
 

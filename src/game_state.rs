@@ -1,28 +1,34 @@
 use agb::{display::GraphicsFrame, input::ButtonController};
 use alloc::{boxed::Box, vec::Vec};
-use crate::{game_obj::GameObj, DELTA, scene_list};
+use crate::{game_obj::GameObj, global_data, scene_list, DELTA};
 
 pub(crate) struct GameState {
     obj_box: Vec<Box<dyn GameObj>>,
-    input_controller: ButtonController,
     current_map: scene_list::SCENES,
+    globals: global_data::GlobalData,
 }
 
 impl GameState {
     pub fn new() -> GameState {
         return GameState {
             obj_box: Vec::new(),
-            input_controller: ButtonController::new(),
             current_map: scene_list::SCENES::TestScene,
+            globals: global_data::GlobalData::new(),
         }
     }
 
     pub fn cycle_update(&mut self, frame: &mut GraphicsFrame) {
-        self.input_controller.update();
-        update_free(&mut self.obj_box);
-        update_objs(&mut self.obj_box, &self.input_controller);
-        update_collisions(&mut self.obj_box);
-        draw_objs(&mut self.obj_box, frame);
+        match self.globals.scene_change_queued() {
+            Some(new_scene) => self.change_scene(new_scene),
+            None => {
+                self.globals.update_input();
+                update_free(&mut self.obj_box);
+                update_objs(&mut self.obj_box, &mut self.globals);
+                update_collisions(&mut self.obj_box);
+                draw_objs(&mut self.obj_box, frame);
+            },
+        }
+
     }
 
     pub fn change_scene(&mut self, next_scene: scene_list::SCENES) {
@@ -48,10 +54,10 @@ impl GameState {
     }
 }
 
-fn update_objs(obj_box: &mut Vec<Box<dyn GameObj>>, input: &ButtonController) {
+fn update_objs(obj_box: &mut Vec<Box<dyn GameObj>>, globals: &mut global_data::GlobalData) {
     for obj in obj_box {
         if obj.on_screen() {
-            obj.update(input);
+            obj.update(globals);
         }
     }
 }
