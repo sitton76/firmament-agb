@@ -1,5 +1,5 @@
 #![allow(dead_code, unused_variables)]
-use agb::{display::GraphicsFrame, fixnum::Vector2D};
+use agb::{display::GraphicsFrame, fixnum::Vector2D, input::ButtonController};
 use alloc::boxed::Box;
 
 pub(crate) enum ResponseType {
@@ -14,7 +14,7 @@ pub trait GameObj {
         return;
     }
 
-    fn update(&mut self) { //Updates the object
+    fn update(&mut self, controller: &ButtonController) { //Updates the object
         return;
     }
 
