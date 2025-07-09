@@ -7,10 +7,11 @@
 
 use agb::display::GraphicsFrame;
 use agb::{fixnum::Vector2D, input::ButtonController};
+
 use crate::scene::{SCENES, BACKGROUNDS};
 
 // BG stuff starts
-use agb::include_background_gfx;
+use agb::{include_background_gfx};
 use agb::display::tiled::VRAM_MANAGER;
 include_background_gfx!(
     mod background,

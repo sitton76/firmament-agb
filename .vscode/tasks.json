@@ -17,7 +17,12 @@
         {
             "label": "Ready ROM for hardware",
             "command": "agb-gbafix",
-            "args": ["target/thumbv4t-none-eabi/release/firmament-agb", "-o", "firmament-agb.gba"]
-        },
+            "args": [
+                "target/thumbv4t-none-eabi/release/firmament-agb",
+                "-o",
+                "firmament-agb.gba"
+            ],
+            "problemMatcher": []
+        }
     ],
 }

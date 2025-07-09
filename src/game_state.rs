@@ -5,7 +5,7 @@
     Scene changes are handled in the globals struct.
 */
 
-use agb::{display::GraphicsFrame};
+use agb::{display::GraphicsFrame, sound::mixer::Mixer};
 use alloc::{boxed::Box, vec::Vec};
 use crate::{game_obj::GameObj, global_data, scene};
 

@@ -8,6 +8,7 @@ edition = "2024"
 
 [dependencies]
 agb = "0.22.3"
+agb_tracker = "0.22.3"
 
 [profile.dev]
 opt-level = 3
