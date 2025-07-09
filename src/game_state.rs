@@ -26,7 +26,10 @@ impl GameState {
 
     pub fn cycle_update(&mut self, frame: &mut GraphicsFrame) {
         match self.globals.scene_change_queued() {
-            Some(new_scene) => self.change_scene(new_scene),
+            Some(new_scene) => {
+                self.change_scene(new_scene);
+                self.globals.process_bg(frame);
+            },
             None => {
                 self.globals.update_input();
                 self.globals.process_bg(frame);
