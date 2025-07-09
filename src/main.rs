@@ -19,6 +19,11 @@ const RIGHT_EDGE: i32 = 120;
 const UP_EDGE: i32 = 80;
 const DOWN_EDGE: i32 = -14;
 
+const LEFT_SCROLL: i32 = 15;
+const RIGHT_SCROLL: i32 = 209;
+const UP_SCROLL: i32 = 15;
+const DOWN_SCROLL: i32 = 124;
+
 #[agb::entry]
 fn main(mut gba: agb::Gba) -> ! {
     let mut gfx = gba.graphics.get();  

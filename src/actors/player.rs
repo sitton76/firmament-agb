@@ -5,12 +5,24 @@ use agb::include_aseprite;
 use agb::display::object::Object;
 use alloc::boxed::Box;
 use crate::game_obj::{GameObj, ResponseType};
-use crate::{global_data, DELTA, DOWN_EDGE, LEFT_EDGE, RIGHT_EDGE, UP_EDGE};
+use crate::{global_data, DELTA};
 
 include_aseprite!(
     mod sprites,
     "gfx/new_img.aseprite"
 );
+
+//consts related to where the screen scroll should end
+const LEFT_EDGE: i32 = -120;
+const RIGHT_EDGE: i32 = 120;
+const UP_EDGE: i32 = 80;
+const DOWN_EDGE: i32 = -14;
+
+// consts related to where the screen scroll should start based on the players position
+const LEFT_SCROLL: i32 = 15;
+const RIGHT_SCROLL: i32 = 209;
+const UP_SCROLL: i32 = 15;
+const DOWN_SCROLL: i32 = 124;
 
 pub(crate) struct Player {
     object: Object,
@@ -84,21 +96,21 @@ impl Player {
     fn move_camera_offset(&mut self, globals: &mut global_data::GlobalData) {
         // Prevents the player from reaching the looping point of the map while allowing screen scrolling to trigger.
         let mut pos_offset = globals.get_camera_offset();
-        if (self.col.position.x < 15) && (self.off_screen_pos.x > LEFT_EDGE) {
+        if (self.col.position.x < LEFT_SCROLL) && (self.off_screen_pos.x > LEFT_EDGE) {
             pos_offset.x -= 1;
             self.off_screen_pos.x -= 1;
             self.moving_left = true;
-        } else if (self.col.position.x > 209) && (self.off_screen_pos.x < RIGHT_EDGE) {
+        } else if (self.col.position.x > RIGHT_SCROLL) && (self.off_screen_pos.x < RIGHT_EDGE) {
             pos_offset.x += 1;
             self.off_screen_pos.x += 1;
             self.moving_right = true;
         }
 
-        if (self.col.position.y < 15) && (self.off_screen_pos.y < UP_EDGE) {
+        if (self.col.position.y < UP_SCROLL) && (self.off_screen_pos.y < UP_EDGE) {
             pos_offset.y -= 1;
             self.off_screen_pos.y += 1;
             self.moving_up = true;
-        } else if (self.col.position.y > 124) && (self.off_screen_pos.y > DOWN_EDGE) {
+        } else if (self.col.position.y > DOWN_SCROLL) && (self.off_screen_pos.y > DOWN_EDGE) {
             pos_offset.y += 1;
             self.off_screen_pos.y -= 1;
             self.moving_down = true;
