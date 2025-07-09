@@ -14,6 +14,7 @@ pub fn get_layout(scene: SCENES) -> Vec<Box<dyn GameObj>> {
     match scene {
         SCENES::TestScene => {
             new_obj_box.push(Box::new(actor::player::Player::new(Vector2D { x: 0, y: 0 })));
+            //new_obj_box.push(Box::new(actor::wall::Wall::new(Vector2D { x: 50, y: 50 }, Vector2D { x: 50, y: 200 })));
         },
         SCENES::Map001 => {
             new_obj_box.push(Box::new(actor::player::Player::new(Vector2D { x: 0, y: 0 })));

@@ -1,5 +1,5 @@
 #![allow(dead_code, unused_variables)]
-use agb::{display::GraphicsFrame, fixnum::Vector2D};
+use agb::{display::GraphicsFrame, fixnum::{Rect, Vector2D}};
 use alloc::boxed::Box;
 use crate::global_data;
 
@@ -27,7 +27,7 @@ pub trait GameObj {
         return false;
     }
 
-    fn check_collision(&mut self, other: &Box<dyn GameObj>, delta: f32) -> ResponseType { //Handles the local collision detection.
+    fn check_collision(&mut self, other: &Box<dyn GameObj>) -> ResponseType { //Handles the local collision detection.
         return ResponseType::NONE;
     }
 
@@ -37,6 +37,10 @@ pub trait GameObj {
 
     fn handle_response(&mut self, response: ResponseType) { //Handles the reaction from the object being checked in "check_collision()"
         return;
+    }
+
+    fn get_collider(&self) -> Option<Rect<i32>> { //Gets the collider for the object, or None if there is no collider
+        return None;
     }
 
     fn get_pos(&self) -> Option<Vector2D<i32>> {  //Gets the position of the object.

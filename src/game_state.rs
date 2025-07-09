@@ -1,6 +1,6 @@
 use agb::{display::GraphicsFrame};
 use alloc::{boxed::Box, vec::Vec};
-use crate::{game_obj::GameObj, global_data, scene, DELTA};
+use crate::{game_obj::GameObj, global_data, scene};
 
 pub(crate) struct GameState {
     obj_box: Vec<Box<dyn GameObj>>,
@@ -106,7 +106,7 @@ fn update_collisions(obj_box: &mut Vec<Box<dyn GameObj>>) {
                 }
                 let entry = &mut left[i];
                 let other = &mut right[0];
-                let reply = entry.check_collision(other, DELTA);
+                let reply = entry.check_collision(other);
                 other.handle_response(reply);
             }
         }
