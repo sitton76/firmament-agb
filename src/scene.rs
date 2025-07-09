@@ -24,10 +24,10 @@ pub fn get_layout(scene: SCENES) -> Vec<Box<dyn GameObj>> {
     match scene {
         SCENES::TestScene => {
             new_obj_box.push(Box::new(actor::player::Player::new(
-                Vector2D { x: 0, y: 0 }))
+                Vector2D { x: 50, y: 50 }))
             );
             new_obj_box.push(Box::new(actor::wall::Wall::new(
-                Vector2D { x: 50, y: 50 }))
+                Vector2D { x: 100, y: 100 }))
             );
         },
         SCENES::Map001 => {
@@ -35,7 +35,7 @@ pub fn get_layout(scene: SCENES) -> Vec<Box<dyn GameObj>> {
                 Vector2D { x: 50, y: 50 }))
             );
             new_obj_box.push(Box::new(actor::wall::Wall::new(
-                Vector2D { x: 0, y: 0 }))
+                Vector2D { x: 100, y: 100 }))
             );
         }
     }

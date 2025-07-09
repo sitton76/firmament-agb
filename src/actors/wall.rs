@@ -26,11 +26,11 @@ impl Wall {
             free_ready: false
         }
     }
-
 }
 
 impl GameObj for Wall {
-    fn update(&mut self, _globals: &mut crate::global_data::GlobalData) {
+    fn update(&mut self, globals: &mut crate::global_data::GlobalData) {
+        self.col.position -= globals.get_camera_offset();
         self.object.set_pos(self.col.position);
     }
 

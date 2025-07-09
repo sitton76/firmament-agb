@@ -58,6 +58,22 @@ impl Player {
         self.col.position = self.prev_pos;
     }
 
+    fn move_camera_offset(&mut self, globals: &mut global_data::GlobalData) {
+        let mut pos_offset = globals.get_camera_offset();
+        if self.col.position.x < 15 {
+            pos_offset.x -= 1;
+        } else if self.col.position.x > 209 {
+            pos_offset.x += 1;
+        }
+
+        if self.col.position.y < 15 {
+            pos_offset.y -= 1;
+        } else if self.col.position.y > 129 {
+            pos_offset.y += 1;
+        }
+        globals.set_camera_offset(pos_offset);
+    } 
+
 }
 
 impl GameObj for Player {
@@ -66,7 +82,8 @@ impl GameObj for Player {
         self.col.position.x = self.col.position.x.clamp(0, agb::display::WIDTH - 16);
         self.col.position.y = self.col.position.y.clamp(0, agb::display::HEIGHT - 16);
         self.handle_input(globals);
-        self.col.position = self.col.position;
+        self.move_camera_offset(globals);
+        self.col.position -= globals.get_camera_offset();
         self.object.set_pos(self.col.position);
     }
 

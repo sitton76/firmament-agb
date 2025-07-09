@@ -28,9 +28,11 @@ impl GameState {
         match self.globals.scene_change_queued() {
             Some(new_scene) => {
                 self.change_scene(new_scene);
+                self.globals.reset_offset();
                 self.globals.process_bg(frame);
             },
             None => {
+                self.globals.reset_offset();
                 self.globals.update_input();
                 self.globals.process_bg(frame);
                 update_free(&mut self.obj_box);

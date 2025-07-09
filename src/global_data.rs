@@ -102,12 +102,16 @@ impl GlobalData {
     }
 
     //Camera offset functions
-    pub fn get_cam_offset(self) -> Vector2D<i32> {
-        return self.cam_offset
+    pub fn add_scroll(&mut self, added_val: Vector2D<i32>) {
+        self.cam_offset += added_val;
     }
 
-    pub fn set_cam_offset(&mut self, new_offset : Vector2D<i32>) {
-        self.cam_offset = new_offset
+    pub fn get_camera_offset(&self) -> Vector2D<i32> {
+        return self.cam_offset;
+    }
+
+    pub fn set_camera_offset(&mut self, new_offset: Vector2D<i32>) {
+        self.cam_offset = new_offset;
     }
 
     pub fn reset_offset(&mut self) {
