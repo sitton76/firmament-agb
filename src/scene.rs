@@ -22,8 +22,7 @@ pub fn get_layout(scene: SCENES) -> Vec<Box<dyn GameObj>> {
                 Vector2D { x: 0, y: 0 }))
             );
             new_obj_box.push(Box::new(actor::wall::Wall::new(
-                Vector2D { x: 50, y: 50 },
-                Vector2D { x: 5, y: 200 }))
+                Vector2D { x: 50, y: 50 }))
             );
         },
         SCENES::Map001 => {

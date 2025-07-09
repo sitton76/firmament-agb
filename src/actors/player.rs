@@ -25,7 +25,7 @@ impl Player {
     pub fn new(starting_pos: Vector2D<i32>) -> Player {
         Player {
             object: Object::new(sprites::TEST_PLAYER.sprite(0)),
-            col: Rect { position: starting_pos, size: vec2(20, 22) },
+            col: Rect { position: starting_pos, size: vec2(16, 16) },
             prev_pos: Vector2D { x: 0, y: 0 },
             speed: 100.0,
             on_screen: true,
@@ -57,8 +57,8 @@ impl Player {
 impl GameObj for Player {
     fn update(&mut self, globals: &mut global_data::GlobalData) {
         self.prev_pos = self.col.position;
-        self.col.position.x = self.col.position.x.clamp(0, agb::display::WIDTH - 32);
-        self.col.position.y = self.col.position.y.clamp(0, agb::display::HEIGHT - 32);
+        self.col.position.x = self.col.position.x.clamp(0, agb::display::WIDTH - 16);
+        self.col.position.y = self.col.position.y.clamp(0, agb::display::HEIGHT - 16);
         self.handle_input(globals);
         self.col.position = self.col.position;
         self.object.set_pos(self.col.position);
