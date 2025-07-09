@@ -5,26 +5,73 @@
     Contains info about flags, what scene is queued up, the camera offset, and the controller.
 */
 
+use agb::display::GraphicsFrame;
 use agb::{fixnum::Vector2D, input::ButtonController};
+use crate::scene::{SCENES, BACKGROUNDS};
 
-use crate::scene::SCENES;
+// BG stuff starts
+use agb::include_background_gfx;
+use agb::display::tiled::VRAM_MANAGER;
+include_background_gfx!(
+    mod background,
+    BG1 => deduplicate "gfx/background.aseprite",
+    BG2 => deduplicate "gfx/background_2.aseprite",
+);
+
+use agb::display::{
+    Priority,
+    tiled::{RegularBackground, RegularBackgroundSize, TileFormat},
+};
+// BG stuff ends
 
 pub(crate) struct GlobalData {
     flags: [bool; Flags::FlagMax as usize],
     next_scene: Option<SCENES>,
     cam_offset: Vector2D<i32>,
-    input_controller: ButtonController
+    input_controller: ButtonController,
+    bg: RegularBackground,
+    current_bg: Option<BACKGROUNDS>
 }
 
 impl GlobalData {
     //Constructor
     pub fn new() -> GlobalData {
+        let new_bg = RegularBackground::new(
+                Priority::P3,
+                RegularBackgroundSize::Background32x32,
+                TileFormat::FourBpp
+        );
+        VRAM_MANAGER.set_background_palettes(background::PALETTES);
         GlobalData {
             flags: [false; Flags::FlagMax as usize],
             next_scene: None,
             cam_offset: Vector2D { x: 0, y: 0 },
-            input_controller: ButtonController::new()
+            input_controller: ButtonController::new(),
+            bg: new_bg,
+            current_bg: None
         }
+    }
+
+   pub fn queue_bg_change(&mut self, new_bg: Option<BACKGROUNDS>) {
+        self.current_bg = new_bg;
+    }
+
+    pub fn process_bg(&mut self, frame: &mut GraphicsFrame) {
+        match &self.current_bg {
+            Some(new_bg) => {
+                match new_bg {
+                    BACKGROUNDS::BgImg1 => {
+                        self.bg.fill_with(&background::BG1);
+                    },
+                    BACKGROUNDS::BgImg2 => {
+                        self.bg.fill_with(&background::BG2);
+                    },
+                }
+                self.bg.show(frame);
+            },
+            None => { self.bg.show(frame); },
+        }
+        self.current_bg = None;
     }
 
     pub fn queue_scene_transition(&mut self, new_scene: SCENES) {

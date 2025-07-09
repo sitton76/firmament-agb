@@ -46,6 +46,12 @@ impl Player {
         } else if controller.is_pressed(Button::RIGHT) {
             self.col.position.x += (self.speed * DELTA) as i32;
         }
+
+        if controller.is_just_pressed(Button::A) {
+            globals.queue_scene_transition(crate::scene::SCENES::TestScene);
+        } else if controller.is_just_pressed(Button::B) {
+            globals.queue_scene_transition(crate::scene::SCENES::Map001);
+        }
     }
 
     fn prevent_movement(&mut self) {

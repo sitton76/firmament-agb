@@ -20,7 +20,7 @@ impl GameState {
         return GameState {
             obj_box: Vec::new(),
             current_map: scene::SCENES::TestScene,
-            globals: global_data::GlobalData::new(),
+            globals: global_data::GlobalData::new()
         }
     }
 
@@ -29,18 +29,19 @@ impl GameState {
             Some(new_scene) => self.change_scene(new_scene),
             None => {
                 self.globals.update_input();
+                self.globals.process_bg(frame);
                 update_free(&mut self.obj_box);
                 update_objs(&mut self.obj_box, &mut self.globals);
                 update_collisions(&mut self.obj_box);
                 draw_objs(&mut self.obj_box, frame);
             },
         }
-
     }
 
     pub fn change_scene(&mut self, next_scene: scene::SCENES) {
         self.empty_box();
         let new_box = scene::get_layout(next_scene);
+        self.globals.queue_bg_change(scene::get_bg_val(next_scene));
         for obj in new_box {
             self.add_obj(obj);
         }
