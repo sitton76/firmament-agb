@@ -14,6 +14,11 @@ mod global_data;
 
 const DELTA : f32 = 1.0 / 59.73;
 
+const LEFT_EDGE: i32 = -120;
+const RIGHT_EDGE: i32 = 120;
+const UP_EDGE: i32 = 80;
+const DOWN_EDGE: i32 = -14;
+
 #[agb::entry]
 fn main(mut gba: agb::Gba) -> ! {
     let mut gfx = gba.graphics.get();  

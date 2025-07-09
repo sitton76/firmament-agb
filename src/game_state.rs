@@ -32,13 +32,13 @@ impl GameState {
                 self.globals.process_bg(frame);
             },
             None => {
-                self.globals.reset_offset();
                 self.globals.update_input();
                 self.globals.process_bg(frame);
                 update_free(&mut self.obj_box);
                 update_objs(&mut self.obj_box, &mut self.globals);
                 update_collisions(&mut self.obj_box);
                 draw_objs(&mut self.obj_box, frame);
+                self.globals.reset_offset();
             },
         }
     }

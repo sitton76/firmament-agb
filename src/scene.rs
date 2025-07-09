@@ -23,11 +23,25 @@ pub fn get_layout(scene: SCENES) -> Vec<Box<dyn GameObj>> {
     let mut new_obj_box: Vec<Box<dyn GameObj>> = Vec::new();
     match scene {
         SCENES::TestScene => {
+            // Test for the scene boundries and scrolling
             new_obj_box.push(Box::new(actor::player::Player::new(
                 Vector2D { x: 50, y: 50 }))
             );
             new_obj_box.push(Box::new(actor::wall::Wall::new(
-                Vector2D { x: 100, y: 100 }))
+                Vector2D { x: 0, y: -80 }))
+            );
+            new_obj_box.push(Box::new(actor::wall::Wall::new(
+                Vector2D { x: 0, y: 160 }))
+            );
+
+            new_obj_box.push(Box::new(actor::wall::Wall::new(
+                Vector2D { x: -120, y: 50 }))
+            );
+            new_obj_box.push(Box::new(actor::wall::Wall::new(
+                Vector2D { x: 346, y: 50 }))
+            );
+            new_obj_box.push(Box::new(actor::wall::Wall::new(
+                Vector2D { x: 150, y: -20 }))
             );
         },
         SCENES::Map001 => {
