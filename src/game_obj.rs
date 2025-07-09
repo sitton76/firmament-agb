@@ -1,4 +1,11 @@
 #![allow(dead_code, unused_variables)]
+
+/*
+    The game object trait, all "actors" should implement this trait
+    but does not need to implement all functions if the default
+    implementaiton works.
+*/
+
 use agb::{display::GraphicsFrame, fixnum::{Rect, Vector2D}};
 use alloc::boxed::Box;
 use crate::global_data;

@@ -1,11 +1,7 @@
-use agb::fixnum::{vec2, Rect};
-use agb::input::Button;
-use agb::{display::GraphicsFrame, fixnum::Vector2D};
+use agb::fixnum::Rect;
+use agb::fixnum::Vector2D;
 use agb::include_aseprite;
-use agb::display::object::Object;
-use alloc::boxed::Box;
 use crate::game_obj::{GameObj, ResponseType};
-use crate::{global_data, DELTA};
 
 include_aseprite!(
     mod sprites,

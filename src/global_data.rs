@@ -1,4 +1,10 @@
 #![allow(dead_code, unused_variables)]
+
+/*
+    Global data about the game, each object has the chance to touch this data when running update()
+    Contains info about flags, what scene is queued up, the camera offset, and the controller.
+*/
+
 use agb::{fixnum::Vector2D, input::ButtonController};
 
 use crate::scene::SCENES;

@@ -1,3 +1,10 @@
+/*
+    What is effectively the main loop for the program
+    Each cycle of the loop ran in main will trigger cycle_update()
+    Which will update all objects position, collision, and draw.
+    Scene changes are handled in the globals struct.
+*/
+
 use agb::{display::GraphicsFrame};
 use alloc::{boxed::Box, vec::Vec};
 use crate::{game_obj::GameObj, global_data, scene};
