@@ -119,10 +119,14 @@ fn update_collisions(obj_box: &mut Vec<Box<dyn GameObj>>) {
                 if left.len() == 0 {
                     break;
                 }
-                let entry = &mut left[i];
-                let other = &mut right[0];
-                let reply = entry.check_collision(other);
-                other.handle_response(reply);
+                if left[i].on_screen() || right[0].on_screen() {
+                    // Skip collision check cycle if either object is off screen.
+                    let entry = &mut left[i];
+                    let other = &mut right[0];
+                    let reply = entry.check_collision(other);
+                    other.handle_response(reply);
+                }
+
             }
         }
     }

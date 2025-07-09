@@ -28,7 +28,7 @@ pub trait GameObj {
 
     fn simple_update(&mut self, globals: &mut global_data::GlobalData) { // Updates the object when offscreen, should use more simple logic if needed, otherwise can forward the call to update()
         // Can also use this to trigger off screen specific logic, such as triggering a timer to reset a enemy respawn and updating it.
-        return;
+        self.update(globals);
     }
 
     fn on_screen(&self) -> bool { //Check if a object is on screen or not.

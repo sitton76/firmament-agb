@@ -32,10 +32,6 @@ impl GameObj for Wall {
         self.object.set_pos(self.col.position);
     }
 
-    fn simple_update(&mut self, globals: &mut crate::global_data::GlobalData) {
-        self.update(globals);
-    }
-
     fn check_to_free(&self) -> bool {
         return self.free_ready;
     }
