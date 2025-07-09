@@ -26,8 +26,21 @@ pub trait GameObj {
         return;
     }
 
+    fn simple_update(&mut self, globals: &mut global_data::GlobalData) { // Updates the object when offscreen, should use more simple logic if needed, otherwise can forward the call to update()
+        // Can also use this to trigger off screen specific logic, such as triggering a timer to reset a enemy respawn and updating it.
+        return;
+    }
+
     fn on_screen(&self) -> bool { //Check if a object is on screen or not.
-        return false;
+        // Renders each object off screen until its 16 pixels off screen.
+        match self.get_pos() {
+            Some(pos) => {
+                let inside_x_range = (pos.x > -16) && (pos.x < 256);
+                let inside_y_range = (pos.y > -16) && (pos.y < 176);
+                return inside_x_range && inside_y_range;
+            },
+            None => return true,
+        }
     }
 
     fn check_to_free(&self) -> bool { //Checks to see if the object should be freed

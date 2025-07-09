@@ -71,7 +71,9 @@ fn update_objs(obj_box: &mut Vec<Box<dyn GameObj>>, globals: &mut global_data::G
     for obj in obj_box {
         if obj.on_screen() {
             obj.update(globals);
-        }
+        } else {
+            obj.simple_update(globals);
+        } 
     }
 }
 

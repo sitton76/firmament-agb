@@ -34,7 +34,6 @@ pub(crate) struct Player {
     moving_left: bool,
     moving_right: bool,
     speed: f32,
-    on_screen: bool,
     free_ready: bool
 }
 
@@ -50,7 +49,6 @@ impl Player {
             moving_left: false,
             moving_right: false,
             speed: 100.0,
-            on_screen: true,
             free_ready: false
         }
     }
@@ -127,8 +125,8 @@ impl GameObj for Player {
         self.moving_left = false;
         self.moving_right = false;
         self.prev_pos = self.col.position;
-        self.col.position.x = self.col.position.x.clamp(0, agb::display::WIDTH - 16);
-        self.col.position.y = self.col.position.y.clamp(0, agb::display::HEIGHT - 16);
+        self.col.position.x = self.col.position.x.clamp(0, (agb::display::WIDTH - 16) as i32);
+        self.col.position.y = self.col.position.y.clamp(0, (agb::display::HEIGHT - 16) as i32);
         self.handle_input(globals);
         self.move_camera_offset(globals);
         self.col.position -= globals.get_camera_offset();
@@ -136,7 +134,7 @@ impl GameObj for Player {
     }
 
     fn on_screen(&self) -> bool {
-        return self.on_screen;
+        return true;
     }
 
     fn check_to_free(&self) -> bool {

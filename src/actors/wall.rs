@@ -13,7 +13,6 @@ include_aseprite!(
 pub(crate) struct Wall {
     object: Object,
     col: Rect<i32>,
-    on_screen: bool,
     free_ready: bool
 }
 
@@ -22,7 +21,6 @@ impl Wall {
         Wall {
             object: Object::new(sprites::WALL.sprite(0)),
             col: Rect { position: starting_pos, size: Vector2D { x: 16, y: 16 } },
-            on_screen: true,
             free_ready: false
         }
     }
@@ -34,8 +32,8 @@ impl GameObj for Wall {
         self.object.set_pos(self.col.position);
     }
 
-    fn on_screen(&self) -> bool {
-        return self.on_screen;
+    fn simple_update(&mut self, globals: &mut crate::global_data::GlobalData) {
+        self.update(globals);
     }
 
     fn check_to_free(&self) -> bool {
@@ -55,6 +53,6 @@ impl GameObj for Wall {
     }
 
     fn draw(&self, frame: &mut GraphicsFrame) {
-        self.object.show(frame);
+        self.object.show(frame);  
     }
 }
