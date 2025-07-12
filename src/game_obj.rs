@@ -31,13 +31,8 @@ pub trait GameObj {
         self.update(globals);
     }
 
-    fn can_cleanup(&self) -> bool { // Marks a obj as clean up able for when the obj_box is full. Usually for less important objects.
-        // Will always try to pick the oldest cleanupable object in the obj_box
-        return false;
-    }
-
     fn on_screen(&self) -> bool { //Check if a object is on screen or not.
-        // Renders each object off screen until its 16 pixels off screen.
+        // Renders each object off screen until its 16 pixels off screen, relies on get_pos() being implemented to work.
         match self.get_pos() {
             Some(pos) => {
                 let inside_x_range = (pos.x > -16) && (pos.x < agb::display::WIDTH + 16);
@@ -49,6 +44,15 @@ pub trait GameObj {
     }
 
     fn check_to_free(&self) -> bool { //Checks to see if the object should be freed
+        return false;
+    }
+
+    fn check_heap(&self) -> Option<i32> {
+        return None;
+    }
+
+    fn can_cleanup(&self) -> bool { // Marks a obj as clean up able for when the obj_box is full. Usually for less important objects.
+        // Will always try to pick the oldest cleanupable object in the obj_box
         return false;
     }
 

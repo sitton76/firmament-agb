@@ -5,7 +5,7 @@ use agb::include_aseprite;
 use agb::display::object::Object;
 use alloc::boxed::Box;
 use crate::game_obj::{GameObj, ResponseType};
-use crate::{global_data, DELTA};
+use crate::{actor, global_data, DELTA};
 
 include_aseprite!(
     mod sprites,
@@ -62,7 +62,10 @@ impl Player {
         }
 
         if controller.is_just_pressed(Button::A) {
-            globals.queue_scene_transition(crate::scene::SCENES::TestScene);
+            //globals.queue_scene_transition(crate::scene::SCENES::TestScene);
+            let mut new_pos = self.col.position.clone();
+            new_pos.x += 16;
+            globals.spawn_queue(actor::Actor::AWall(new_pos));
         } else if controller.is_just_pressed(Button::B) {
             globals.queue_scene_transition(crate::scene::SCENES::Map001);
         }
@@ -136,6 +139,10 @@ impl GameObj for Player {
         return self.free_ready;
     }
 
+    fn check_heap(&self) -> Option<i32> {
+        return Some(core::mem::size_of::<Player>() as i32)
+    }
+
     fn check_collision(&mut self, other: &Box<dyn GameObj>) -> ResponseType {
         let col_1 = match self.get_collider() {
             Some(col) => { col },
@@ -151,11 +158,9 @@ impl GameObj for Player {
                     ResponseType::WALL => self.prevent_movement(),
                     _ => { }, //Unhandled collision type
                 }
-                //col_2.position += cam_offset;
                 return self.check_response_type();
             },
             None => {
-                //col_2.position += cam_offset;
                 return ResponseType::NONE;
             }
         }

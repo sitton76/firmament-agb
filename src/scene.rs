@@ -32,7 +32,7 @@ pub fn get_layout(scene: SCENES) -> Vec<Actor> {
         },
         SCENES::Map001 => {
             new_obj_box.push(Actor::APlayer(Vector2D { x: 50, y: 50 }));
-            new_obj_box.push(Actor::AWall(Vector2D { x: 100, y: 100 }));
+            //new_obj_box.push(Actor::AWall(Vector2D { x: 100, y: 100 }));
         }
     }
     return new_obj_box;

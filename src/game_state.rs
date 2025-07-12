@@ -44,6 +44,7 @@ impl GameState {
                         update_objs(&mut self.obj_box, &mut self.globals);
                         update_collisions(&mut self.obj_box);
                         draw_objs(&mut self.obj_box, frame);
+                        //_get_heap(&self.obj_box);
                         self.globals.reset_offset();
                     },
                     global_data::GAMEMODE::MENU => {
@@ -69,7 +70,7 @@ impl GameState {
     }
 
     pub fn add_obj(&mut self, new_obj: Box<dyn GameObj>) -> Result<bool, &str> {
-        if cleanup_attempt(&mut self.obj_box) {
+        if find_obj_slot(&mut self.obj_box) {
             self.obj_box.push(new_obj);
             match self.obj_box.last_mut() {
                 Some(val) => {
@@ -138,7 +139,7 @@ fn update_free(obj_box: &mut Vec<Box<dyn GameObj>>) {
     }
 }
 
-fn cleanup_attempt(obj_box: &mut Vec<Box<dyn GameObj>>) -> bool {
+fn find_obj_slot(obj_box: &mut Vec<Box<dyn GameObj>>) -> bool {
     if obj_box.len() < 128 {
         // If has enough slots to spawn something, returns true to allow new object to be spawned
         return true;
@@ -161,6 +162,17 @@ fn cleanup_attempt(obj_box: &mut Vec<Box<dyn GameObj>>) -> bool {
         }
         return can_spawn;
     }
+}
+
+fn _get_heap(obj_box: &Vec<Box<dyn GameObj>>) {
+    let mut heap_count: i32 = 0;
+    for obj in obj_box {
+        match obj.check_heap() {
+            Some(got_heap_usage) => heap_count += got_heap_usage,
+            None => {},
+        }
+    }
+    println!("Heap usage: {}", heap_count);
 }
 
 fn update_collisions(obj_box: &mut Vec<Box<dyn GameObj>>) {
