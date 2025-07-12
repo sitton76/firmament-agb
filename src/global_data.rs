@@ -63,8 +63,8 @@ impl GlobalData {
         }
     }
 
-    pub fn spawn_queue(&mut self, child_type: actor::Actor) {
-        self.spawn_queue.push(child_type);
+    pub fn spawn_queue(&mut self, actor_type: actor::Actor) {
+        self.spawn_queue.push(actor_type);
     }
 
     pub fn get_spawn_queue(&self) -> Vec<actor::Actor> {
@@ -133,10 +133,6 @@ impl GlobalData {
     }
 
     //Camera offset functions
-    pub fn add_scroll(&mut self, added_val: Vector2D<i32>) {
-        self.cam_offset += added_val;
-    }
-
     pub fn get_camera_offset(&self) -> Vector2D<i32> {
         return self.cam_offset;
     }

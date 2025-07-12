@@ -39,8 +39,8 @@ impl GameState {
                     global_data::GAMEMODE::PLAY => {
                         // Main gameplay loop logic.
                         self.globals.process_bg(frame);
-                        self.spawn_objs_in_queue();
                         update_free(&mut self.obj_box);
+                        self.spawn_objs_in_queue();
                         update_objs(&mut self.obj_box, &mut self.globals);
                         update_collisions(&mut self.obj_box);
                         draw_objs(&mut self.obj_box, frame);
@@ -69,7 +69,7 @@ impl GameState {
     }
 
     pub fn add_obj(&mut self, new_obj: Box<dyn GameObj>) -> Result<bool, &str> {
-        if self.obj_box.len() < 128 {
+        if cleanup_attempt(&mut self.obj_box) {
             self.obj_box.push(new_obj);
             match self.obj_box.last_mut() {
                 Some(val) => {
@@ -79,7 +79,7 @@ impl GameState {
                 _ => return Err("Unable to get mutable reference to added object!"),
             }
         }
-        return Err("obj_box is full! Skipping added value");
+        return Err("obj_box is full! Skipping added object");
     }
     
     pub fn empty_box(&mut self) {
@@ -138,6 +138,31 @@ fn update_free(obj_box: &mut Vec<Box<dyn GameObj>>) {
     }
 }
 
+fn cleanup_attempt(obj_box: &mut Vec<Box<dyn GameObj>>) -> bool {
+    if obj_box.len() < 128 {
+        // If has enough slots to spawn something, returns true to allow new object to be spawned
+        return true;
+    } else {
+        // If all 128 slots are full, attempt to free a slot.
+        let mut can_spawn = false;
+        let mut iter_count = 0;
+        for obj in &mut *obj_box {
+            if obj.can_cleanup() {
+                // Checks each object to find one that can be cleaned up if able.
+                can_spawn = true;
+                break;
+            } else {
+                iter_count += 1;
+            }
+        }
+        if can_spawn {
+            // If a object that is cleanup able is found, it is removed from the obj_box and its slot will be filled with the new one later.
+            obj_box.remove(iter_count);
+        }
+        return can_spawn;
+    }
+}
+
 fn update_collisions(obj_box: &mut Vec<Box<dyn GameObj>>) {
     let len = obj_box.len();
     if len < 2 {
@@ -151,7 +176,6 @@ fn update_collisions(obj_box: &mut Vec<Box<dyn GameObj>>) {
                     break;
                 }
                 if left[i].on_screen() || right[0].on_screen() {
-                    // Skip collision check cycle if either object is off screen.
                     let entry = &mut left[i];
                     let other = &mut right[0];
                     let reply = entry.check_collision(other);

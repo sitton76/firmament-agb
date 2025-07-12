@@ -10,6 +10,11 @@ edition = "2024"
 agb = "0.22.3"
 agb_tracker = "0.22.3"
 
+[build-dependencies]
+quote = "1"
+proc-macro2 = "1"
+tiled = "0.14.0"
+
 [profile.dev]
 opt-level = 3
 debug = true

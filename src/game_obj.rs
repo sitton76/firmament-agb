@@ -31,6 +31,11 @@ pub trait GameObj {
         self.update(globals);
     }
 
+    fn can_cleanup(&self) -> bool { // Marks a obj as clean up able for when the obj_box is full. Usually for less important objects.
+        // Will always try to pick the oldest cleanupable object in the obj_box
+        return false;
+    }
+
     fn on_screen(&self) -> bool { //Check if a object is on screen or not.
         // Renders each object off screen until its 16 pixels off screen.
         match self.get_pos() {

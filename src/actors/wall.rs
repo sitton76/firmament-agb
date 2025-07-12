@@ -40,6 +40,10 @@ impl GameObj for Wall {
         return ResponseType::WALL;
     }
 
+    fn can_cleanup(&self) -> bool {
+        return true;
+    }
+
     fn get_collider(&self) -> Option<Rect<i32>> {
         return Some(self.col);
     }
