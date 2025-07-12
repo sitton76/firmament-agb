@@ -7,8 +7,14 @@
 
 use agb::display::GraphicsFrame;
 use agb::{fixnum::Vector2D, input::ButtonController};
-
+use alloc::vec::Vec;
+use crate::actor;
 use crate::scene::{SCENES, BACKGROUNDS};
+
+pub enum GAMEMODE {
+    PLAY,
+    MENU
+}
 
 // BG stuff starts
 use agb::{include_background_gfx};
@@ -30,6 +36,8 @@ pub(crate) struct GlobalData {
     next_scene: Option<SCENES>,
     cam_offset: Vector2D<i32>,
     input_controller: ButtonController,
+    current_mode: GAMEMODE,
+    spawn_queue: Vec<actor::Actor>,
     bg: RegularBackground,
     current_bg: Option<BACKGROUNDS>
 }
@@ -48,12 +56,34 @@ impl GlobalData {
             next_scene: None,
             cam_offset: Vector2D { x: 0, y: 0 },
             input_controller: ButtonController::new(),
+            current_mode: GAMEMODE::PLAY,
+            spawn_queue: Vec::new(),
             bg: new_bg,
             current_bg: None
         }
     }
 
-   pub fn queue_bg_change(&mut self, new_bg: Option<BACKGROUNDS>) {
+    pub fn spawn_queue(&mut self, child_type: actor::Actor) {
+        self.spawn_queue.push(child_type);
+    }
+
+    pub fn get_spawn_queue(&self) -> Vec<actor::Actor> {
+        return self.spawn_queue.clone();
+    }
+
+    pub fn clear_spawn_queue(&mut self) {
+        self.spawn_queue.clear();
+    }
+
+    pub fn get_mode(&self) -> &GAMEMODE {
+        return &self.current_mode;
+    }
+
+    pub fn set_mode(&mut self, new_mode: GAMEMODE) {
+        self.current_mode = new_mode;
+    }
+
+    pub fn queue_bg_change(&mut self, new_bg: Option<BACKGROUNDS>) {
         self.current_bg = new_bg;
     }
 

@@ -35,8 +35,8 @@ pub trait GameObj {
         // Renders each object off screen until its 16 pixels off screen.
         match self.get_pos() {
             Some(pos) => {
-                let inside_x_range = (pos.x > -16) && (pos.x < 256);
-                let inside_y_range = (pos.y > -16) && (pos.y < 176);
+                let inside_x_range = (pos.x > -16) && (pos.x < agb::display::WIDTH + 16);
+                let inside_y_range = (pos.y > -16) && (pos.y < agb::display::HEIGHT + 16);
                 return inside_x_range && inside_y_range;
             },
             None => return true,

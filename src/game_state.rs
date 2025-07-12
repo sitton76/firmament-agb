@@ -5,9 +5,9 @@
     Scene changes are handled in the globals struct.
 */
 
-use agb::{display::GraphicsFrame, sound::mixer::Mixer};
+use agb::{display::GraphicsFrame, println};
 use alloc::{boxed::Box, vec::Vec};
-use crate::{game_obj::GameObj, global_data, scene};
+use crate::{actor, game_obj::GameObj, global_data, scene};
 
 pub(crate) struct GameState {
     obj_box: Vec<Box<dyn GameObj>>,
@@ -27,18 +27,30 @@ impl GameState {
     pub fn cycle_update(&mut self, frame: &mut GraphicsFrame) {
         match self.globals.scene_change_queued() {
             Some(new_scene) => {
+                // Logic for when changing scenes.
                 self.change_scene(new_scene);
                 self.globals.reset_offset();
                 self.globals.process_bg(frame);
+                self.globals.set_mode(global_data::GAMEMODE::PLAY);
             },
             None => {
                 self.globals.update_input();
-                self.globals.process_bg(frame);
-                update_free(&mut self.obj_box);
-                update_objs(&mut self.obj_box, &mut self.globals);
-                update_collisions(&mut self.obj_box);
-                draw_objs(&mut self.obj_box, frame);
-                self.globals.reset_offset();
+                match self.globals.get_mode() {
+                    global_data::GAMEMODE::PLAY => {
+                        // Main gameplay loop logic.
+                        self.globals.process_bg(frame);
+                        self.spawn_objs_in_queue();
+                        update_free(&mut self.obj_box);
+                        update_objs(&mut self.obj_box, &mut self.globals);
+                        update_collisions(&mut self.obj_box);
+                        draw_objs(&mut self.obj_box, frame);
+                        self.globals.reset_offset();
+                    },
+                    global_data::GAMEMODE::MENU => {
+                        // Gameplay logic for while in menus.
+                    },
+                }
+
             },
         }
     }
@@ -48,22 +60,41 @@ impl GameState {
         let new_box = scene::get_layout(next_scene);
         self.globals.queue_bg_change(scene::get_bg_val(next_scene));
         for obj in new_box {
-            self.add_obj(obj);
+            match self.add_obj(actor::spawn_actor(obj)) {
+                Ok(_) => {},
+                Err(err_msg) => println!("{}", err_msg),
+            }
         }
         self.current_map = next_scene;
     }
 
-    pub fn add_obj(&mut self, new_obj: Box<dyn GameObj>) {
-        self.obj_box.push(new_obj);
-        match self.obj_box.last_mut() {
-            Some(val) => val.ready(),
-            _ => return,
+    pub fn add_obj(&mut self, new_obj: Box<dyn GameObj>) -> Result<bool, &str> {
+        if self.obj_box.len() < 128 {
+            self.obj_box.push(new_obj);
+            match self.obj_box.last_mut() {
+                Some(val) => {
+                    val.ready();
+                    return Ok(true);
+                }
+                _ => return Err("Unable to get mutable reference to added object!"),
+            }
         }
+        return Err("obj_box is full! Skipping added value");
     }
     
     pub fn empty_box(&mut self) {
         self.obj_box.clear();
         assert!(self.obj_box.is_empty());
+    }
+
+    pub fn spawn_objs_in_queue(&mut self) {
+        for child_queue_entry in self.globals.get_spawn_queue() {
+            match self.add_obj(actor::spawn_actor(child_queue_entry)) {
+                Ok(_) => {} ,
+                Err(err_msg) => println!("{}", err_msg),
+            }
+        }
+        self.globals.clear_spawn_queue();
     }
 }
 
