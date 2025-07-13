@@ -13,10 +13,10 @@ include_aseprite!(
 );
 
 //consts related to where the screen scroll should end
-const LEFT_EDGE: i32 = -120;
-const RIGHT_EDGE: i32 = 120;
-const UP_EDGE: i32 = 80;
-const DOWN_EDGE: i32 = -14;
+const LEFT_EDGE: i32 = 0;
+const RIGHT_EDGE: i32 = 140;
+const UP_EDGE: i32 = 0;
+const DOWN_EDGE: i32 = -94;
 
 // consts related to where the screen scroll should start based on the players position
 const LEFT_SCROLL: i32 = 15;

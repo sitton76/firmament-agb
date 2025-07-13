@@ -1,9 +1,9 @@
-use core::iter::Map;
-
 use agb::{fixnum::{vec2, Rect, Vector2D}, println};
 use alloc::vec::Vec;
 
 use crate::{game_obj::ResponseType, scene};
+
+// Keep maps 24x15 tiles (16x16 sized tiles)
 
 #[path = "maps/test_map.rs"] pub(crate) mod test_map;
 
@@ -48,7 +48,7 @@ impl MapInfo {
         }
         self.map_data.push(TileData::new(tile_pos, id, has_col));
         self.current_row += 1;
-        if self.current_row > self.width {
+        if self.current_row > self.width - 1 {
             self.current_row = 0;
             self.current_column += 1;
         }
@@ -60,7 +60,6 @@ impl MapInfo {
                 let tile_col = Rect::new(tile.pos, vec2(self.tile_size, self.tile_size));
                 match tile_col.overlapping_rect(obj_col) {
                     Some(_) => {
-                        println!("pos {:?}", tile.pos);
                         return ResponseType::LEVEL;
                     },
                     None => { },
@@ -68,6 +67,12 @@ impl MapInfo {
             }
         }
         return ResponseType::NONE;
+    }
+
+    pub fn offset_tiles(&mut self, offset_val: Vector2D<i32>) {
+        for tile in &mut self.map_data {
+            tile.pos -= offset_val;
+        }
     }
 }
 

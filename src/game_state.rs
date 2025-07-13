@@ -202,6 +202,7 @@ fn update_collisions(obj_box: &mut Vec<Box<dyn GameObj>>) {
 }
 
 fn check_for_level_col(obj_box: &mut Vec<Box<dyn GameObj>>, globals: &mut global_data::GlobalData) {
+    globals.level_offset();
     for obj in obj_box {
         match obj.get_collider() {
             Some(col) => {

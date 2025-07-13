@@ -11,7 +11,7 @@ use agb::{fixnum::Vector2D, input::ButtonController};
 use alloc::vec::Vec;
 use crate::game_obj::ResponseType;
 use crate::maps::MapInfo;
-use crate::{actor, maps, scene};
+use crate::{actor, maps};
 use crate::scene::{SCENES, BACKGROUNDS};
 
 pub enum GAMEMODE {
@@ -20,7 +20,7 @@ pub enum GAMEMODE {
 }
 
 // BG stuff starts
-use agb::{include_background_gfx, println};
+use agb::{include_background_gfx};
 use agb::display::tiled::VRAM_MANAGER;
 include_background_gfx!(
     mod background,
@@ -138,6 +138,16 @@ impl GlobalData {
                 return level.is_colliding(checker)
             },
             None => return ResponseType::NONE,
+        }
+    }
+
+    pub fn level_offset(&mut self) {
+        let offset = self.get_camera_offset();
+        match &mut self.level_layout {
+            Some(layout) => {
+                layout.offset_tiles(offset);
+            },
+            None => {},
         }
     }
 
