@@ -3,7 +3,7 @@
     and a function to spawn them into the game_states obj_box
 */
 
-use agb::fixnum::Vector2D;
+use agb::fixnum::vec2;
 use alloc::vec::Vec;
 use crate::actor::Actor;
 
@@ -23,15 +23,15 @@ pub fn get_layout(scene: SCENES) -> Vec<Actor> {
     match scene {
         SCENES::TestScene => {
             // Test for the scene boundries and scrolling
-            new_obj_box.push(Actor::APlayer(Vector2D { x: 50, y: 50 }));
-            new_obj_box.push(Actor::AWall(Vector2D { x: 0, y: -80 }));
-            new_obj_box.push(Actor::AWall(Vector2D { x: 0, y: 160 }));
-            new_obj_box.push(Actor::AWall(Vector2D { x: -120, y: 50 }));
-            new_obj_box.push(Actor::AWall(Vector2D { x: 346, y: 50 }));
-            new_obj_box.push(Actor::AWall(Vector2D { x: 150, y: -20 }));
+            new_obj_box.push(Actor::APlayer(vec2(100, 100)));
+            new_obj_box.push(Actor::AWall(vec2(0, -80)));
+            new_obj_box.push(Actor::AWall(vec2(0, 160)));
+            new_obj_box.push(Actor::AWall(vec2(-120, 50)));
+            new_obj_box.push(Actor::AWall(vec2(346, 50)));
+            new_obj_box.push(Actor::AWall(vec2(150, -20)));
         },
         SCENES::Map001 => {
-            new_obj_box.push(Actor::APlayer(Vector2D { x: 50, y: 50 }));
+            new_obj_box.push(Actor::APlayer(vec2(100, 100)));
             //new_obj_box.push(Actor::AWall(Vector2D { x: 100, y: 100 }));
         }
     }

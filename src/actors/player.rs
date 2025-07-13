@@ -1,7 +1,7 @@
 use agb::fixnum::{vec2, Rect};
 use agb::input::Button;
 use agb::{display::GraphicsFrame, fixnum::Vector2D};
-use agb::include_aseprite;
+use agb::{include_aseprite, println};
 use agb::display::object::Object;
 use alloc::boxed::Box;
 use crate::game_obj::{GameObj, ResponseType};
@@ -164,7 +164,15 @@ impl GameObj for Player {
                 return ResponseType::NONE;
             }
         }
+    }
 
+    fn handle_response(&mut self, response: ResponseType) {
+        match response {
+            ResponseType::LEVEL => {
+                self.prevent_movement()
+            },
+            _ => {},
+        }
     }
 
     fn check_response_type(&self) -> ResponseType {

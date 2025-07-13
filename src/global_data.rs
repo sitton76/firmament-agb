@@ -6,9 +6,12 @@
 */
 
 use agb::display::GraphicsFrame;
+use agb::fixnum::Rect;
 use agb::{fixnum::Vector2D, input::ButtonController};
 use alloc::vec::Vec;
-use crate::actor;
+use crate::game_obj::ResponseType;
+use crate::maps::MapInfo;
+use crate::{actor, maps, scene};
 use crate::scene::{SCENES, BACKGROUNDS};
 
 pub enum GAMEMODE {
@@ -17,7 +20,7 @@ pub enum GAMEMODE {
 }
 
 // BG stuff starts
-use agb::{include_background_gfx};
+use agb::{include_background_gfx, println};
 use agb::display::tiled::VRAM_MANAGER;
 include_background_gfx!(
     mod background,
@@ -39,7 +42,8 @@ pub(crate) struct GlobalData {
     current_mode: GAMEMODE,
     spawn_queue: Vec<actor::Actor>,
     bg: RegularBackground,
-    current_bg: Option<BACKGROUNDS>
+    current_bg: Option<BACKGROUNDS>,
+    level_layout: Option<MapInfo>,
 }
 
 impl GlobalData {
@@ -59,7 +63,8 @@ impl GlobalData {
             current_mode: GAMEMODE::PLAY,
             spawn_queue: Vec::new(),
             bg: new_bg,
-            current_bg: None
+            current_bg: None,
+            level_layout: None,
         }
     }
 
@@ -121,6 +126,19 @@ impl GlobalData {
 
     pub fn update_input(&mut self) {
         self.input_controller.update();
+    }
+
+    pub fn load_level_layout(&mut self, new_scene: SCENES) {
+        self.level_layout = Some(maps::make_map(new_scene));
+    }
+
+    pub fn check_level_col(&self, checker: Rect<i32>) -> ResponseType {
+        match &self.level_layout {
+            Some(level) => {
+                return level.is_colliding(checker)
+            },
+            None => return ResponseType::NONE,
+        }
     }
 
     //Flag functions

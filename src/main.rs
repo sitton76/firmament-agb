@@ -15,6 +15,7 @@ mod scene;
 mod actor;
 mod game_obj;
 mod global_data;
+mod maps;
 
 const DELTA : f32 = 1.0 / 59.73;
 
