@@ -15,7 +15,7 @@
  1. Open the `src/scene.rs` file.
  2. In the SCENES enum, define a new value for your new scene(example: `NewScene001`)
  3. Under the `get_layout()` function below, make a match case for your SCENE enum.
- 4. Initialize your objects using the Actor:: enums and insert the default values for them, then push the result into `new_obj_box`
+ 4. Initialize your objects using the Actor:: enums and insert the default values for them, then push the result into `new_obj_box` (example: `new_obj_box.push(Actor::ANewActor(vec2(100, 100)));` )
 
 # Adding/Using persistant data.
  1. Open the `src/global_data.rs` file.
