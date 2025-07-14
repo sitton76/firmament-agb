@@ -5,6 +5,8 @@
 
  Currently a WIP project that is missing only a few core systems to be usable in projects, check [issues page](https://github.com/sitton76/firmament-agb/issues) for more details
 
+ For building and setup, [check chapter 3 of the agb rust book](https://agbrs.dev/book/setup/getting_started.html)
+
 # Adding Objects
  1. Create a new file in the `src/actors/` folder. (example: `new_actor.rs`)
  2. Create a new struct with a constructor for it. (example: `struct NewActor {}`)
