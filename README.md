@@ -24,8 +24,6 @@
  4. Actors that implement `GameObj` have access to GlobalData via the `update()` and `simple_update()` functions, so get and use data as needed from there.
 
 # Switching scenes.
- `GameObj` has access to the GlobalState value during the `update()` and `simple_update()` functions.
-
  So to switch scenes all you need to do is queue it, as a example in the `update()` GameObj function you can just do:
  
- `globals.queue_scene_transition(scene::SCENES::NewScene001)` and it should execute on the next main loop update cycle.
+ `globals.queue_scene_transition(scene::SCENES::NewScene001);` and it should execute on the next main loop update cycle.
