@@ -43,6 +43,7 @@ impl GameState {
                         self.spawn_objs_in_queue();
                         update_objs(&mut self.obj_box, &mut self.globals);
                         update_collisions(&mut self.obj_box);
+                        check_for_level_col(&mut self.obj_box, &mut self.globals);
                         draw_objs(&mut self.obj_box, frame);
                         //_get_heap(&self.obj_box);
                         self.globals.reset_offset();
@@ -59,6 +60,7 @@ impl GameState {
     pub fn change_scene(&mut self, next_scene: scene::SCENES) {
         self.empty_box();
         let new_box = scene::get_layout(next_scene);
+        self.globals.load_level_layout(next_scene);
         self.globals.queue_bg_change(scene::get_bg_val(next_scene));
         for obj in new_box {
             match self.add_obj(actor::spawn_actor(obj)) {
@@ -69,7 +71,7 @@ impl GameState {
         self.current_map = next_scene;
     }
 
-    pub fn add_obj(&mut self, new_obj: Box<dyn GameObj>) -> Result<bool, &str> {
+    fn add_obj(&mut self, new_obj: Box<dyn GameObj>) -> Result<bool, &str> {
         if find_obj_slot(&mut self.obj_box) {
             self.obj_box.push(new_obj);
             match self.obj_box.last_mut() {
@@ -83,12 +85,12 @@ impl GameState {
         return Err("obj_box is full! Skipping added object");
     }
     
-    pub fn empty_box(&mut self) {
+    fn empty_box(&mut self) {
         self.obj_box.clear();
         assert!(self.obj_box.is_empty());
     }
 
-    pub fn spawn_objs_in_queue(&mut self) {
+    fn spawn_objs_in_queue(&mut self) {
         for child_queue_entry in self.globals.get_spawn_queue() {
             match self.add_obj(actor::spawn_actor(child_queue_entry)) {
                 Ok(_) => {} ,
@@ -172,7 +174,7 @@ fn _get_heap(obj_box: &Vec<Box<dyn GameObj>>) {
             None => {},
         }
     }
-    println!("Heap usage: {}", heap_count);
+    println!("Heap usage: {}/262144", heap_count);
 }
 
 fn update_collisions(obj_box: &mut Vec<Box<dyn GameObj>>) {
@@ -195,6 +197,18 @@ fn update_collisions(obj_box: &mut Vec<Box<dyn GameObj>>) {
                 }
 
             }
+        }
+    }
+}
+
+fn check_for_level_col(obj_box: &mut Vec<Box<dyn GameObj>>, globals: &mut global_data::GlobalData) {
+    globals.level_offset();
+    for obj in obj_box {
+        match obj.get_collider() {
+            Some(col) => {
+                obj.handle_response(globals.check_level_col(col));
+            },
+            None => continue,
         }
     }
 }

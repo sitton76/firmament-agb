@@ -14,7 +14,8 @@ pub(crate) enum ResponseType {
     NONE,
     DAMAGE,
     WALL,
-    PLAYER
+    PLAYER,
+    LEVEL
 }
 
 pub trait GameObj {
