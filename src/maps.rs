@@ -7,6 +7,24 @@ use crate::{game_obj::ResponseType, scene};
 
 #[path = "maps/test_map.rs"] pub(crate) mod test_map;
 
+struct COLOR {
+    R: u8,
+    G: u8,
+    B: u8,
+    A: u8
+}
+
+impl COLOR {
+    fn new(nR: u8, nG: u8, nB: u8, nA: u8) -> COLOR {
+        COLOR {
+            R: nR,
+            G: nG,
+            B: nB,
+            A: nA
+        }
+    }
+}
+
 pub(crate) struct TileData {
     pos: Vector2D<i32>,
     tile_id: i32,

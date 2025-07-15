@@ -14,6 +14,7 @@ agb_tracker = "0.22.3"
 quote = "1"
 proc-macro2 = "1"
 tiled = "0.14.0"
+image = "0.25.6"
 
 [profile.dev]
 opt-level = 3
