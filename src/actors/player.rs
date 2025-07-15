@@ -5,7 +5,7 @@ use agb::include_aseprite;
 use agb::display::object::Object;
 use alloc::boxed::Box;
 use crate::game_obj::{GameObj, ResponseType};
-use crate::{actor, global_data, DELTA};
+use crate::{actor, global_data};
 
 include_aseprite!(
     mod sprites,
@@ -30,7 +30,6 @@ pub(crate) struct Player {
     prev_pos: Vector2D<i32>,
     off_screen_pos: Vector2D<i32>,
     moving: [bool; 4],
-    speed: f32,
     free_ready: bool
 }
 
@@ -42,23 +41,23 @@ impl Player {
             prev_pos: Vector2D { x: 0, y: 0 },
             off_screen_pos: Vector2D { x: 0, y: 0 },
             moving: [false, false, false, false],
-            speed: 100.0,
             free_ready: false
         }
     }
 
     fn handle_input(&mut self, globals: &mut global_data::GlobalData) {
         let controller = globals.get_input();
+        let speed = 1;
         if controller.is_pressed(Button::UP) {
-            self.col.position.y -= (self.speed * DELTA) as i32;
+            self.col.position.y -= speed;
         } else if controller.is_pressed(Button::DOWN) {
-            self.col.position.y += (self.speed * DELTA) as i32
+            self.col.position.y += speed;
         }
 
         if controller.is_pressed(Button::LEFT) {
-            self.col.position.x -= (self.speed * DELTA) as i32;
+            self.col.position.x -= speed;
         } else if controller.is_pressed(Button::RIGHT) {
-            self.col.position.x += (self.speed * DELTA) as i32;
+            self.col.position.x += speed;
         }
 
         if controller.is_just_pressed(Button::A) {
@@ -123,8 +122,8 @@ impl GameObj for Player {
         self.moving[2] = false;
         self.moving[3] = false;
         self.prev_pos = self.col.position;
-        self.col.position.x = self.col.position.x.clamp(0, (agb::display::WIDTH - 16) as i32);
-        self.col.position.y = self.col.position.y.clamp(0, (agb::display::HEIGHT - 16) as i32);
+        self.col.position.x = self.col.position.x.clamp(0, agb::display::WIDTH - 16);
+        self.col.position.y = self.col.position.y.clamp(0, agb::display::HEIGHT - 16);
         self.handle_input(globals);
         self.move_camera_offset(globals);
         self.col.position -= globals.get_camera_offset();

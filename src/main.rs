@@ -16,8 +16,6 @@ mod actor;
 mod game_obj;
 mod global_data;
 
-const DELTA : f32 = 1.0 / 59.73;
-
 #[agb::entry]
 fn main(mut gba: agb::Gba) -> ! {
     let mut gfx = gba.graphics.get();  
