@@ -1,11 +1,19 @@
-use agb::{fixnum::{vec2, Rect, Vector2D}, println};
+use agb::{fixnum::{vec2, Rect, Vector2D}};
 use alloc::vec::Vec;
 
 use crate::{game_obj::ResponseType, scene};
 
 // Keep maps 24x15 tiles (16x16 sized tiles)
 
+// Collision data
 #[path = "maps/test_map.rs"] pub(crate) mod test_map;
+
+// Tilesheets
+#[path = "maps/tilesheets/tile_sheet.rs"] pub(crate) mod tile_sheet_test;
+
+enum TILESHEETS {
+    TileSheetTest,
+}
 
 struct COLOR {
     R: u8,
@@ -15,13 +23,19 @@ struct COLOR {
 }
 
 impl COLOR {
-    fn new(nR: u8, nG: u8, nB: u8, nA: u8) -> COLOR {
+    fn new(rgba: [u8; 4]) -> COLOR {
         COLOR {
-            R: nR,
-            G: nG,
-            B: nB,
-            A: nA
+            R: rgba[0],
+            G: rgba[1],
+            B: rgba[2],
+            A: rgba[3]
         }
+    }
+}
+
+pub fn fetch_tile_pixel(sheet: TILESHEETS, tile_id: i32, pixel: i32) -> Option<COLOR> {
+    match sheet {
+        TILESHEETS::TileSheetTest => return Some(COLOR::new(tile_sheet_test::TILES[tile_id as usize][pixel as usize])),
     }
 }
 

@@ -27,8 +27,6 @@ fn convert_tile_map(map_name: String, tile_size: u32) {
                         Some(rgba_data) => {
                             let mut out = String::new();
                             let max_tile_count = (max_height / tile_size) * (max_width / tile_size);
-                            out.push_str("use crate::maps::COLOR;\n");
-                            out.push_str(format!("const IMG_SIZE: i32 = {};\n", max_tile_count).as_str());
                             let mut tile_count = 0;
                             let mut column_offset = 0;
                             let mut row_offset = 0;
@@ -65,16 +63,16 @@ fn convert_tile_map(map_name: String, tile_size: u32) {
                                     row_offset += 1;
                                 }
                             }
-                            let mut iter_count = 0;
-                            let tile_length = tile_container[0].len();
+                            let tile_length = tile_size * tile_size;
+                            out.push_str(format!("pub(crate) const TILES: [[[u8; 4]; {}]; {}] = [\n", tile_length, tile_count).as_str());
                             for entry in tile_container {
-                                out.push_str(format!("const TILE_{} : [[u8; 4]; {}] = [\n", iter_count, tile_length).as_str());
+                                out.push_str(format!("[\n     ").as_str());
                                 for sub_entry in entry {
                                     out.push_str(format!("{:?}, ", sub_entry).as_str());
                                 }
-                                out.push_str("];\n");
-                                iter_count += 1;
+                                out.push_str("\n],\n");
                             }
+                            out.push_str("];");
                             fs::write(out_path, out).unwrap();
                         },
                         None => {
