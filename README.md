@@ -25,7 +25,7 @@
  1. Open the `src/global_data.rs` file.
  2. Add new value to the `GlobalData` struct.
  3. Add any interfacing function needed for it to the GameData struct(getters/setters and such)
- 4. Actors that implement `GameObj` have access to GlobalData via the `update()` and `simple_update()` functions, so get and use data as needed from there.
+ 4. Actors that implement `GameObj` have access to GlobalData via the `update()` and `off_screen_update()` functions, so get and use data as needed from there.
 
 # Switching scenes.
  So to switch scenes all you need to do is queue it, as a example in the `update()` GameObj function you can just do:
