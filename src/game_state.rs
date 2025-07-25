@@ -176,24 +176,24 @@ fn _get_heap(obj_box: &Vec<Box<dyn GameObj>>) {
 }
 
 fn update_collisions(obj_box: &mut Vec<Box<dyn GameObj>>) {
-    let len = obj_box.len();
+    let mut active_objs: Vec<_> = obj_box.iter_mut()
+        .filter(|obj| obj.on_screen())
+        .collect();
+    let len = active_objs.len();
     if len < 2 {
         return;
     }
-    for i in 0..len {
-        for j in 0..len {
-            if i != j {
-                let (left, right) = obj_box.split_at_mut(j);
+    for current_block in 0..len {
+        for next_block in 0..len {
+            if current_block != next_block {
+                let (left, right) = active_objs.split_at_mut(next_block);
                 if left.len() == 0 {
                     break;
                 }
-                if left[i].on_screen() || right[0].on_screen() {
-                    let entry = &mut left[i];
-                    let other = &mut right[0];
-                    let reply = entry.check_collision(other);
-                    other.handle_response(reply);
-                }
-
+                let entry = &mut left[current_block];
+                let other = &mut right[0];
+                let reply = entry.check_collision(other);
+                other.handle_response(reply);
             }
         }
     }
