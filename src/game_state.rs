@@ -122,7 +122,7 @@ fn update_free(obj_box: &mut Vec<Box<dyn GameObj>>) {
     let mut found_free: bool = false;
     let mut iter_count: usize = 0;
     loop {
-        for entry in &mut *obj_box {
+        for entry in &*obj_box {
             if entry.check_to_free() == true {
                 found_free = true;
                 break;
@@ -164,17 +164,6 @@ fn find_obj_slot(obj_box: &mut Vec<Box<dyn GameObj>>) -> bool {
     }
 }
 
-fn _get_heap(obj_box: &Vec<Box<dyn GameObj>>) {
-    let mut heap_count: i32 = 0;
-    for obj in obj_box {
-        match obj.check_heap() {
-            Some(got_heap_usage) => heap_count += got_heap_usage,
-            None => {},
-        }
-    }
-    println!("Heap usage: {}", heap_count);
-}
-
 fn update_collisions(obj_box: &mut Vec<Box<dyn GameObj>>) {
     let mut active_objs: Vec<_> = obj_box.iter_mut()
         .filter(|obj| obj.on_screen())
@@ -186,14 +175,26 @@ fn update_collisions(obj_box: &mut Vec<Box<dyn GameObj>>) {
     for current_block in 0..len {
         for next_block in 0..len {
             if current_block != next_block {
+                /*
+                Here is how this goes:
+                    'Left' is the object that is checking.
+                    'Right' is the object being checked.
+                    'Left' checks 'Right's ResponseType, then sends back its own ResponseType for 'Right' to handle if it is configured to do so.
+
+                An example of this would be a Player touching a Enemy.
+                Player takes damage, but then the Enemy might get knocked back away from the Player.
+                In an example such as this, its important to handle the collision in such a way where only one object reacts to the other, then sends the reply to be handled.
+                If both handle eachother without the reply then you might have unintended behaviour.
+
+                In the above example, ideally the Player will treat all hits from any Enemy type the same.
+                Whereas the Enemy might handle the reply in a unique way. (Enemy might bounce? Or teleport? Maybe turn around? Kill itself?)
+                */
                 let (left, right) = active_objs.split_at_mut(next_block);
                 if left.len() == 0 {
                     break;
                 }
-                let entry = &mut left[current_block];
-                let other = &mut right[0];
-                let reply = entry.check_collision(other);
-                other.handle_response(reply);
+                let reply = left[current_block].check_collision(right[0]);
+                right[0].handle_response(reply);
             }
         }
     }

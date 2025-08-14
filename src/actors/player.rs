@@ -138,11 +138,8 @@ impl GameObj for Player {
         return self.free_ready;
     }
 
-    fn check_heap(&self) -> Option<i32> {
-        return Some(core::mem::size_of::<Player>() as i32)
-    }
-
     fn check_collision(&mut self, other: &Box<dyn GameObj>) -> ResponseType {
+        // Returns a ResponseType, this is sent back to the "other" to handle its collision with this object
         let col_1 = match self.get_collider() {
             Some(col) => { col },
             _ => { return ResponseType::NONE; },
@@ -154,6 +151,7 @@ impl GameObj for Player {
         match col_1.overlapping_rect(col_2) {
             Some(_) => {
                 match other.check_response_type() {
+                    // Our object handling the collision locally.
                     ResponseType::WALL => self.prevent_movement(),
                     _ => { }, //Unhandled collision type
                 }
@@ -163,7 +161,6 @@ impl GameObj for Player {
                 return ResponseType::NONE;
             }
         }
-
     }
 
     fn check_response_type(&self) -> ResponseType {

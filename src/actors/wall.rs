@@ -36,10 +36,6 @@ impl GameObj for Wall {
         return self.free_ready;
     }
 
-    fn check_heap(&self) -> Option<i32> {
-        return Some(core::mem::size_of::<Wall>() as i32)
-    }
-
     fn check_response_type(&self) -> ResponseType {
         return ResponseType::WALL;
     }

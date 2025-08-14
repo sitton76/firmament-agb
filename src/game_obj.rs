@@ -47,10 +47,6 @@ pub trait GameObj {
         return false;
     }
 
-    fn check_heap(&self) -> Option<i32> {
-        return None;
-    }
-
     fn can_cleanup(&self) -> bool { // Marks a obj as clean up able for when the obj_box is full. Usually for less important objects.
         // Will always try to pick the oldest cleanupable object in the obj_box
         return false;
